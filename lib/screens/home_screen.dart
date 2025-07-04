@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:weather/models/weather_model.dart';
 import 'package:weather/screens/search_screen.dart';
+import 'package:weather/widgets/no_weather_data.dart';
 import 'package:weather/widgets/weather_data.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key, this.weatherModel});
+
+  WeatherModel? weatherModel;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +31,9 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: WeatherData(),
+      body: weatherModel == null
+          ? const NoWeatherData()
+          : WeatherData(weatherModel: weatherModel!),
     );
   }
 }
