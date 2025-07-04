@@ -1,7 +1,6 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:weather/models/weather_model.dart';
+import 'package:weather/screens/home_screen.dart';
 import 'package:weather/services/weather_service.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -12,15 +11,18 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  WeatherModel? weatherModel;
 
-  List<WeatherModel> weatherList = [];
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   getweather();
+  // }
 
-  @override
-  void initState() async {
-    super.initState();
-    // weatherList = await WeatherService().getWeatherData(cityName: )
-  }
-
+  // Future<WeatherModel> getweather({String? onSubmittedCityName}) async =>
+  //     weatherModel = await WeatherService().getWeatherData(
+  //       cityName: onSubmittedCityName!,
+  //     );
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +40,16 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: TextField(
-            onSubmitted: (value) {
-              
+            onSubmitted: (value) async {
+              weatherModel = await WeatherService().getWeatherData(
+                cityName: value,
+              );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomeScreen(weatherModel: weatherModel),
+                ),
+              );
             },
             decoration: InputDecoration(
               border: OutlineInputBorder(
