@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:weather/models/weather_model.dart';
-import 'package:weather/screens/home_screen.dart';
-import 'package:weather/services/weather_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather/cubtis/get_weather_cubit/get_weather_cubit.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -11,25 +10,12 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  WeatherModel? weatherModel;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getweather();
-  // }
-
-  // Future<WeatherModel> getweather({String? onSubmittedCityName}) async =>
-  //     weatherModel = await WeatherService().getWeatherData(
-  //       cityName: onSubmittedCityName!,
-  //     );
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.white),
-        backgroundColor: Colors.blue,
+        // backgroundColor: Colors.blue,
         elevation: 10,
         title: Text(
           'Search City',
@@ -40,16 +26,10 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: TextField(
-            onSubmitted: (value) async {
-              weatherModel = await WeatherService().getWeatherData(
-                cityName: value,
-              );
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeScreen(weatherModel: weatherModel),
-                ),
-              );
+            onSubmitted: (value) {
+              var getWeatherCubir = BlocProvider.of<GetWeatherCubit>(context);
+              getWeatherCubir.getweather(cityName: value);
+              Navigator.pop(context);
             },
             decoration: InputDecoration(
               border: OutlineInputBorder(
