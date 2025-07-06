@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:weather/models/weather_model.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weather/cubtis/get_weather_cubit/get_weather_cubit.dart';
+import 'package:weather/cubtis/get_weather_cubit/get_weather_states.dart';
 import 'package:weather/screens/search_screen.dart';
 import 'package:weather/widgets/no_weather_data.dart';
 import 'package:weather/widgets/weather_data.dart';
 
 class HomeScreen extends StatelessWidget {
-  HomeScreen({super.key, this.weatherModel});
-
-  WeatherModel? weatherModel;
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
         elevation: 10,
         title: Text(
           'Weather App',
@@ -31,9 +30,15 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: weatherModel == null
-          ? const NoWeatherData()
-          : WeatherData(weatherModel: weatherModel!),
+      body: BlocBuilder<GetWeatherCubit, WeatherStates>(
+        builder: (context, state) {
+          return state is InitialState
+              ? NoWeatherData()
+              : state is WeatherLoadeddState
+              ? WeatherData()
+              : Text('oops, there was an error');
+        },
+      ),
     );
   }
 }
