@@ -4,7 +4,7 @@ class WeatherModel {
   final String? icon;
   final double maxtempC;
   final double mintempC;
-  final String lastUpdated;
+  final DateTime lastUpdated;
   final String weatherStatus;
 
   WeatherModel({
@@ -20,7 +20,7 @@ class WeatherModel {
   factory WeatherModel.fromJson(Map<String, dynamic> json) {
     return WeatherModel(
       name: json['location']['name'] ?? '',
-      lastUpdated: json['current']['last_updated'] ?? '',
+      lastUpdated: DateTime.parse(json['current']['last_updated'] ?? ''),
       tempC: json['current']['temp_c'] ?? 0,
       icon: json['current']['condition']['icon'] ?? '',
       maxtempC: json['forecast']['forecastday'][0]['day']['maxtemp_c'] ?? 0,
